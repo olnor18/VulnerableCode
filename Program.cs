@@ -16,6 +16,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+
 app.MapGet("/weatherforecast", (string city) =>
 {
     // Start the child process.
@@ -24,7 +25,7 @@ app.MapGet("/weatherforecast", (string city) =>
     p.StartInfo.UseShellExecute = false;
     p.StartInfo.RedirectStandardOutput = true;
     p.StartInfo.FileName = "curl.exe";
-    p.StartInfo.Arguments = "-H 'X-Api-Key: YOUR_API_KEY' https://api.api-ninjas.com/v1/weather?city="+city
+    p.StartInfo.Arguments = "-H 'X-Api-Key: d984c043-d893-4a76-94fe-bac14948fe5d' https://api.api-ninjas.com/v1/weather?city="+city
     p.Start();
     // Do not wait for the child process to exit before
     // reading to the end of its redirected stream.
