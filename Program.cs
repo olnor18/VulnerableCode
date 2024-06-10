@@ -21,13 +21,13 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 
-app.MapGet("/user", async (string name) => {
-    using var connection = new MySqlConnection("Server=SQL01;User ID=Admin;Password=SuperS3cureP@ss;Database=app");
-    using var command = connection.CreateCommand();
-    command.CommandText = $"SELECT name FROM users WHERE name='{name}';";
-    var users = await command.ExecuteReaderAsync();
-    return users;
-});
+// app.MapGet("/user", async (string name) => {
+//     using var connection = new MySqlConnection("Server=SQL01;User ID=Admin;Password=SuperS3cureP@ss;Database=app");
+//     using var command = connection.CreateCommand();
+//     command.CommandText = $"SELECT name FROM users WHERE name='{name}';";
+//     var users = await command.ExecuteReaderAsync();
+//     return users;
+// });
 
 app.MapGet("/users", async (int limit) => {
     using var connection = new MySqlConnection("Server=SQL01;User ID=Admin;Password=SuperS3cureP@ss;Database=app");
