@@ -16,10 +16,19 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.MapGet("/users", (string name) => {
+app.MapGet("/user", (string name) => {
     using var connection = await database.OpenConnectionAsync();
     using var command = connection.CreateCommand();
     command.CommandText = $"SELECT name FROM users WHERE name='{name}';";
+    var users = await ReadAllAsync(await command.ExecuteReaderAsync());
+    return users;
+});
+
+int limit = 10; 
+app.MapGet("/users", () => {
+    using var connection = await database.OpenConnectionAsync();
+    using var command = connection.CreateCommand();
+    command.CommandText = $"SELECT name FROM users limit {limit};";
     var users = await ReadAllAsync(await command.ExecuteReaderAsync());
     return users;
 });
