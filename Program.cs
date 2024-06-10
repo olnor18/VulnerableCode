@@ -24,11 +24,10 @@ app.MapGet("/user", (string name) => {
     return users;
 });
 
-int limit = 10; 
-app.MapGet("/users", () => {
+app.MapGet("/users", (int limit) => {
     using var connection = await database.OpenConnectionAsync();
     using var command = connection.CreateCommand();
-    command.CommandText = $"SELECT name FROM users limit {limit};";
+    command.CommandText = $"SELECT name FROM users limit {limit ?? 10};";
     var users = await ReadAllAsync(await command.ExecuteReaderAsync());
     return users;
 });
