@@ -20,21 +20,22 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-MySqlDataSource database;
+MySqlDataSource database = new MySqlDataSource("Server=SQL01;User ID=Admin;Password=SuperS3cureP@ss;Database=app");
 
 app.MapGet("/user", async (string name) => {
     using var connection = await database.OpenConnectionAsync();
     using var command = connection.CreateCommand();
     command.CommandText = $"SELECT name FROM users WHERE name='{name}';";
-    var users = await ReadAllAsync(await command.ExecuteReaderAsync());
+    var users = await command.ExecuteReaderAsync();
     return users;
 });
 
 app.MapGet("/users", async (int limit) => {
     using var connection = await database.OpenConnectionAsync();
     using var command = connection.CreateCommand();
-    command.CommandText = $"SELECT name FROM users limit {limit ?? 10};";
-    var users = await ReadAllAsync(await command.ExecuteReaderAsync());
+    if (limit == 0) limit = 10;
+    command.CommandText = $"SELECT name FROM users limit {limit};";
+    var users = await command.ExecuteReaderAsync();
     return users;
 });
 
