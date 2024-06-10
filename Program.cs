@@ -20,10 +20,9 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-MySqlDataSource database = new MySqlDataSource("Server=SQL01;User ID=Admin;Password=SuperS3cureP@ss;Database=app");
 
 app.MapGet("/user", async (string name) => {
-    using var connection = await database.OpenConnectionAsync();
+    using var connection = new MySqlConnection("Server=SQL01;User ID=Admin;Password=SuperS3cureP@ss;Database=app");
     using var command = connection.CreateCommand();
     command.CommandText = $"SELECT name FROM users WHERE name='{name}';";
     var users = await command.ExecuteReaderAsync();
@@ -31,7 +30,7 @@ app.MapGet("/user", async (string name) => {
 });
 
 app.MapGet("/users", async (int limit) => {
-    using var connection = await database.OpenConnectionAsync();
+    using var connection = new MySqlConnection("Server=SQL01;User ID=Admin;Password=SuperS3cureP@ss;Database=app");
     using var command = connection.CreateCommand();
     if (limit == 0) limit = 10;
     command.CommandText = $"SELECT name FROM users limit {limit};";
@@ -59,7 +58,6 @@ app.MapGet("/weatherforecast", (string city) =>
     p.WaitForExit();
     return output;
 })
-.WithName("GetWeatherForecast")
-.WithOpenApi();
+.WithName("GetWeatherForecast");
 
 app.Run();
