@@ -1,3 +1,7 @@
+using System.Diagnostics; 
+using System.Data.Common;
+using MySqlConnector;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -16,7 +20,9 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.MapGet("/user", (string name) => {
+MySqlDataSource database;
+
+app.MapGet("/user", async (string name) => {
     using var connection = await database.OpenConnectionAsync();
     using var command = connection.CreateCommand();
     command.CommandText = $"SELECT name FROM users WHERE name='{name}';";
@@ -24,7 +30,7 @@ app.MapGet("/user", (string name) => {
     return users;
 });
 
-app.MapGet("/users", (int limit) => {
+app.MapGet("/users", async (int limit) => {
     using var connection = await database.OpenConnectionAsync();
     using var command = connection.CreateCommand();
     command.CommandText = $"SELECT name FROM users limit {limit ?? 10};";
