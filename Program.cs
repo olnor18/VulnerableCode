@@ -16,6 +16,15 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.MapGet("/users", (string name) => {
+    using var connection = await database.OpenConnectionAsync();
+    using var command = connection.CreateCommand();
+    command.CommandText = $"SELECT name FROM users WHERE name='{name}';";
+    var users = await ReadAllAsync(await command.ExecuteReaderAsync());
+    return users;
+});
+
+
 
 app.MapGet("/weatherforecast", (string city) =>
 {
